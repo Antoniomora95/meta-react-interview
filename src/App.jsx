@@ -20,28 +20,29 @@ function StudentItem({
     </li>
   )
 }
-function Classroom({
+function StudentsList({children, ...props}) {
+  return (
+    <ul {...props}>{children}</ul>
+  )
+}
+
+function ClassroomContainer({
   students,
   selectStudentHandler,
+  ...props
 }) {
-  if (!students) {
-    return 'no data :)'
-  }
-
-  return (
-    <ul>
-      {
-        students.map(student => (
-          <StudentItem
-            key={student.id}
-            student={student}
-            selectStudentHandler={selectStudentHandler}
-          />
-        )
-        )
-      }
-    </ul>
-  )
+  const studentItems = students.map(student => (
+    <StudentItem
+      key={student.id}
+      student={student}
+      selectStudentHandler={selectStudentHandler}
+    />
+  ));
+  return(
+    <StudentsList {...props}>
+      {studentItems}
+    </StudentsList>
+  );
 }
 
 function ButtonsContainer({
@@ -101,24 +102,22 @@ function App() {
     setStudents(updatedStudents);
   }
 
-  const studentsLeftSide = getStudentsForClassroom(students)(LOCATIONS.LEFT)
-  const studentsRightSide = getStudentsForClassroom(students)(LOCATIONS.RIGHT)
-
   return (
     <>
       <section>
         <h3>META React frontend interview</h3>
       </section>
       <div className='container'>
-        <Classroom
-          students={studentsLeftSide}
+        <ClassroomContainer
+          students={getStudentsForClassroom(students)(LOCATIONS.LEFT)}
           selectStudentHandler={selectStudentById}
+          className='align-right'
         />
         <ButtonsContainer
           studentsLocationHandler={studentsLocationHandler}
         />
-        <Classroom
-          students={studentsRightSide}
+        <ClassroomContainer
+          students={getStudentsForClassroom(students)(LOCATIONS.RIGHT)}
           selectStudentHandler={selectStudentById}
         />
       </div>
