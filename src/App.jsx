@@ -3,28 +3,25 @@ import { useState } from 'react'
 import './App.css'
 import { LOCATIONS, initialItems } from './mocks';
 
-//9: 15
+const getStudentsForClassroom = (students) => (location) =>
+  (students.filter(student => student.location === location))
 
 function StudentItem({
   student,
   selectStudentHandler
 }) {
   const { id, name, isSelected } = student;
-  const onChange = (id) => () => {
-    selectStudentHandler(id)
-  }
+  const onChangeHandler = (id) => () => selectStudentHandler(id);
 
   return (
     <li className='student-item'>
-      <input type="checkbox" name={name} id={id} onChange={onChange(id)} checked={isSelected} />
-      <span>{id}</span>
-      <span>{name}</span>
+      <input type="checkbox" name={name} id={id} onChange={onChangeHandler(id)} checked={isSelected} />
+      <span style={{ marginLeft: '1rem' }}>{name}</span>
     </li>
   )
 }
 function Classroom({
   students,
-  location,
   selectStudentHandler,
 }) {
   if (!students) {
@@ -34,15 +31,14 @@ function Classroom({
   return (
     <ul>
       {
-        students.filter(student => student.location === location)
-          .map(student => (
-            <StudentItem
-              key={student.id}
-              student={student}
-              selectStudentHandler={selectStudentHandler}
-            />
-          )
-          )
+        students.map(student => (
+          <StudentItem
+            key={student.id}
+            student={student}
+            selectStudentHandler={selectStudentHandler}
+          />
+        )
+        )
       }
     </ul>
   )
@@ -58,7 +54,7 @@ function ButtonsContainer({
     studentsLocationHandler(LOCATIONS.LEFT)
   }
   return (
-    <div style={{ marginLeft: '20px', marginRight: '20px' }}>
+    <div className='buttons-container'>
       <button
         style={{ marginBottom: '20px', width: '100%' }}
         onClick={handlerMoveToRight}
@@ -105,6 +101,9 @@ function App() {
     setStudents(updatedStudents);
   }
 
+  const studentsLeftSide = getStudentsForClassroom(students)(LOCATIONS.LEFT)
+  const studentsRightSide = getStudentsForClassroom(students)(LOCATIONS.RIGHT)
+
   return (
     <>
       <section>
@@ -112,14 +111,14 @@ function App() {
       </section>
       <div className='container'>
         <Classroom
-          location={LOCATIONS.LEFT}
-          students={students}
+          students={studentsLeftSide}
           selectStudentHandler={selectStudentById}
         />
-        <ButtonsContainer studentsLocationHandler={studentsLocationHandler} />
+        <ButtonsContainer
+          studentsLocationHandler={studentsLocationHandler}
+        />
         <Classroom
-          location={LOCATIONS.RIGHT}
-          students={students}
+          students={studentsRightSide}
           selectStudentHandler={selectStudentById}
         />
       </div>
