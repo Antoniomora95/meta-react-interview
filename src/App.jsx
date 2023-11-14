@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import './App.css'
 import { LOCATIONS, initialItems } from './mocks';
+import getLongestSubstringUniqueCharacters from './mid-level-interview';
 
 const getStudentsForClassroom = (students) => (location) =>
   (students.filter(student => student.location === location))
@@ -20,7 +21,7 @@ function StudentItem({
     </li>
   )
 }
-function StudentsList({children, ...props}) {
+function StudentsList({ children, ...props }) {
   return (
     <ul {...props}>{children}</ul>
   )
@@ -38,7 +39,7 @@ function ClassroomContainer({
       selectStudentHandler={selectStudentHandler}
     />
   ));
-  return(
+  return (
     <StudentsList {...props}>
       {studentItems}
     </StudentsList>
@@ -55,20 +56,22 @@ function ButtonsContainer({
     studentsLocationHandler(LOCATIONS.LEFT)
   }
   return (
-    <div className='buttons-container'>
-      <button
-        style={{ marginBottom: '20px', width: '100%' }}
-        onClick={handlerMoveToRight}
-      >
-        Going Right &#8594;
-      </button>
-      <button
-        style={{ width: '100%' }}
-        onClick={handlerMoveToLeft}
-      >
-        Going Left &#8592;
-      </button>
-    </div>
+    <>
+      <div className='buttons-container'>
+        <button
+          style={{ marginBottom: '20px', width: '100%' }}
+          onClick={handlerMoveToRight}
+        >
+          Going Right &#8594;
+        </button>
+        <button
+          style={{ width: '100%' }}
+          onClick={handlerMoveToLeft}
+        >
+          Going Left &#8592;
+        </button>
+      </div>
+    </>
   );
 }
 
@@ -121,6 +124,21 @@ function App() {
           selectStudentHandler={selectStudentById}
         />
       </div>
+
+
+
+
+      
+      <section>
+
+        <h3>Middle react interview</h3>
+        <div>AAABBCD: {getLongestSubstringUniqueCharacters('AAABBCD')}</div>
+        <div>ABCDDEFGHJK: {getLongestSubstringUniqueCharacters('ABCDDEFGHJK')}</div>
+        <div>WWERRFADQ: {getLongestSubstringUniqueCharacters('WWERRFADQ')}</div>
+        <div>ZZDEWWACJQ: {getLongestSubstringUniqueCharacters('ZZDEWWACJQ')}</div>
+        <div>AABEBCDDAXC: {getLongestSubstringUniqueCharacters('AABEBCDDAXC')}</div>
+        yei
+      </section>
     </>
   )
 }
